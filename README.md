@@ -1,73 +1,136 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# How to use
+1. Use `yarn start` to start the application.
+2. Use `yarn test` to check all unit tests for both `user` and `product`.
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# APIs
+The endpoint for GraphQL is `http://localhost:3000/graphql`
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ yarn install
+## Product
+### Create
+To create a new product, remember the `id` field will be generated automatically.
+**Query**
+```graphql
+mutation createProduct($createProductInput: CreateProductInput!) {
+    createProduct(createProductInput: $createProductInput) {
+        id
+        name
+        price
+    }
+}
+```
+**Variables**
+```graphql
+{
+    "createProductInput": {
+        "name": "chair",
+        "price": 17.34
+    }
+}
 ```
 
-## Running the app
-
-```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+### findAll
+To list all products.
+**Query**
+```graphql
+query products {
+    products {
+        id
+        name
+        price
+    }
+}
 ```
 
-## Test
-
-```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+### findOne
+To find one product by its id.
+**Query**
+```graphql
+query product($id: String!) {
+    product(id: $id) {
+        id
+        name
+        price
+    }
+}
+```
+**Variables**
+```graphql
+{
+    "id": "eb6efe43-1965-431b-ab86-f9f19db85c38"
+}
 ```
 
-## Support
+## User
+### Create
+To create a new product, remember to generate products first the `id` field will be generated automatically.
+**Query**
+```graphql
+mutation createUser($createUserInput: CreateUserInput!) {
+    createUser(createUserInput: $createUserInput) {
+        id
+        name
+        email
+        age
+        order {
+            id
+            name
+            price
+        }
+    }
+}
+```
+**Variables**
+```graphql
+{
+    "createUserInput": {
+        "name": "jack",
+        "email": "jack@gmail",
+        "age": 30,
+        "orderIds": [
+            "cfe3f1a9-442d-42f5-8cbc-8bc71568ecce"
+        ]
+    }
+}
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### findAll
+**Query**
+```graphql
+query users {
+    users {
+        id
+        name
+        email
+        age
+        order {
+            id
+            name
+            price
+        }
+    }
+}
+```
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+### findOne
+**Query**
+```graphql
+query user($id: String!) {
+    user(id: $id) {
+        id
+        name
+        email
+        age
+        order {
+            id
+            name
+            price
+        }
+    }
+}
+```
+**Variables**
+```graphql
+{
+    "id": "b7c45d1f-a3f4-455d-95f1-ddfa75bb08f4"
+}
+```
