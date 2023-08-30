@@ -16,12 +16,21 @@ export class UserService {
     ) {}
 
     async create(createUserInput: CreateUserInput): Promise<User> {
+        // Convert orderIds to products
         const { orderIds, ...restOfCreateUserInput } = createUserInput;
         const orderIdsWithoutDup = Array.from(new Set(orderIds));
         const allProducts = await this.productRepository.find();
         const selectedProducts = allProducts.filter((prod) =>
             orderIdsWithoutDup.includes(prod.id),
         );
+
+        // Check if the email address already exists
+        const allUsers = await this.userRepository.find();
+        const allEmails = allUsers.map((user) => user.email);
+        const { email } = restOfCreateUserInput;
+        if (allEmails.includes(email)) {
+            throw new Error(`${email} is exists!`);
+        }
 
         const user = {
             ...restOfCreateUserInput,

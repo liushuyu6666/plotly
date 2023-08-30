@@ -12,6 +12,14 @@ export class ProductService {
     ) {}
 
     async create(createProductInput: CreateProductInput): Promise<Product> {
+        // Check if the product name already exists
+        const { name } = createProductInput;
+        const products = await this.productRepository.find();
+        const productNames = products.map((prod) => prod.name);
+        if (productNames.includes(name)) {
+            throw new Error(`product name ${name} already exists!`);
+        }
+
         return await this.productRepository.save(createProductInput);
     }
 
